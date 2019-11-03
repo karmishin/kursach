@@ -9,7 +9,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = "Kursach: The Game";
 		config.width = 800;
-		config.height = 600;
+		config.height = 480;
 		new LwjglApplication(new MyGdxGame(), config);
 	}
 }
