@@ -39,10 +39,16 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			player.rectangle.x -= 100 * Gdx.graphics.getDeltaTime();
+			if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
+				player.sprite.flip(true,false);
+			}
 		}
 
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			player.rectangle.x += 100 * Gdx.graphics.getDeltaTime();
+			if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
+				player.sprite.flip(true,false);
+			}
 		}
 	}
 	
