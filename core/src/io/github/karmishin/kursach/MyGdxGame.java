@@ -10,18 +10,26 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MyGdxGame extends ApplicationAdapter {
+	Background background;
 	Player player;
 	SpriteBatch batch;
 	Music music;
 
+
 	public MyGdxGame() {
 		player = new Player();
+		background = new Background();
 	}
 	
 	@Override
 	public void create () {
+		background.texture1 = new Texture(Gdx.files.internal("background/plx-1.png"));
+		background.sprite1 = new Sprite(background.texture1);
+		background.sprite1.setSize(800, 600);
+
 		player.texture = new Texture(Gdx.files.internal("character/sprites/idle outline.gif"));
 		player.sprite = new Sprite(player.texture);
+
 		batch = new SpriteBatch();
 
 		music = Gdx.audio.newMusic(Gdx.files.internal("music/golosovanie.mp3"));
@@ -34,6 +42,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
+		batch.draw(background.sprite1, 0,0);
 		batch.draw(player.sprite, player.rectangle.x, player.rectangle.y);
 		batch.end();
 
