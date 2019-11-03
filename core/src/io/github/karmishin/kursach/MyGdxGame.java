@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class MyGdxGame extends ApplicationAdapter {
 	Background background;
 	Player player;
+
+	OrthographicCamera camera;
 	SpriteBatch batch;
 	Music music;
 
@@ -25,11 +28,12 @@ public class MyGdxGame extends ApplicationAdapter {
 	public void create () {
 		background.texture1 = new Texture(Gdx.files.internal("background/plx-1.png"));
 		background.sprite1 = new Sprite(background.texture1);
-		background.sprite1.setSize(800, 600);
 
 		player.texture = new Texture(Gdx.files.internal("character/sprites/idle outline.gif"));
 		player.sprite = new Sprite(player.texture);
 
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, 800, 480);
 		batch = new SpriteBatch();
 
 		music = Gdx.audio.newMusic(Gdx.files.internal("music/golosovanie.mp3"));
@@ -42,7 +46,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		batch.draw(background.sprite1, 0,0);
+		batch.draw(background.sprite1, 0, 0, 800, 480);
 		batch.draw(player.sprite, player.rectangle.x, player.rectangle.y);
 		batch.end();
 
