@@ -17,6 +17,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	OrthographicCamera camera;
 	SpriteBatch batch;
 	Music music;
+	private float elapsedTime = 0;
 
 
 	public MyGdxGame() {
@@ -43,14 +44,14 @@ public class MyGdxGame extends ApplicationAdapter {
 		background.sprite5 = new Sprite(background.texture5);
 
 		player.texture = new Texture(Gdx.files.internal("character/sprites/stay/frame-01.png"));
-		player.sprite = new Sprite(player.texture);
+		player.sprite = new Sprite();
 
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
 		batch = new SpriteBatch();
 
 		music = Gdx.audio.newMusic(Gdx.files.internal("music/golosovanie.mp3"));
-		music.setVolume(0);
+		music.setVolume(1);
 		music.play();
 	}
 
@@ -58,28 +59,28 @@ public class MyGdxGame extends ApplicationAdapter {
 	public void render () {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		elapsedTime += Gdx.graphics.getDeltaTime();
+		TextureRegion currentFrame = runningAnimation.getKeyFrame(elapsedTime, true);
+
 		batch.begin();
 		batch.draw(background.sprite1, 0, 0, 800, 480);
 		batch.draw(background.sprite2, 0, 0, 800, 480);
 		batch.draw(background.sprite3, 0, 0, 800, 480);
 		batch.draw(background.sprite4, 0, 0, 800, 480);
 		batch.draw(background.sprite5, 0, 0, 800, 480);
-		batch.draw(player.sprite, player.rectangle.x, player.rectangle.y);
+		//batch.draw(player.sprite, player.rectangle.x, player.rectangle.y);
+
+		batch.draw(currentFrame, player.rectangle.x, player.rectangle.y);
 		batch.end();
 
 		if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
 			player.rectangle.x -= 100 * Gdx.graphics.getDeltaTime();
-			if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
-				player.sprite.flip(true,false);
-			}
+
 		}
 
 		if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
 			player.rectangle.x += 100 * Gdx.graphics.getDeltaTime();
-			if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
-				player.sprite.flip(true,false);
 			}
-		}
 	}
 	
 	@Override
