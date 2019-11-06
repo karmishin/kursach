@@ -9,6 +9,11 @@ public class Player {
     Texture texture;
     Sprite sprite;
     Rectangle rectangle;
+    PlayerState state;
+
+    enum PlayerState {
+        IDLE, RUN
+    }
 
     Player() {
         rectangle = new Rectangle();
