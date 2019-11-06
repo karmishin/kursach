@@ -12,8 +12,8 @@ import com.badlogic.gdx.graphics.g2d.*;
 public class MyGdxGame extends ApplicationAdapter {
 	Background background;
 	Player player;
-	Animation<TextureRegion> runningAnimation;
-	TextureAtlas atlas;
+	Animation<TextureRegion> runningAnimation, idleAnimation;
+	TextureAtlas runningAtlas, idleAtlas;
 	OrthographicCamera camera;
 	SpriteBatch batch;
 	Music music;
@@ -28,8 +28,10 @@ public class MyGdxGame extends ApplicationAdapter {
 	
 	@Override
 	public void create () {
-		atlas = new TextureAtlas(Gdx.files.internal("character/sprites/run.atlas"));
-		runningAnimation = new Animation<TextureRegion>(0.033f, atlas.getRegions());
+		runningAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/running.atlas"));
+		runningAnimation = new Animation<TextureRegion>(0.033f, runningAtlas.getRegions());
+		idleAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/idle.atlas"));
+		idleAnimation = new Animation<TextureRegion>(0.1f, idleAtlas.getRegions());
 
 		background.texture1 = new Texture(Gdx.files.internal("background/plx-1.png"));
 		background.texture2 = new Texture(Gdx.files.internal("background/plx-2.png"));
@@ -60,7 +62,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		elapsedTime += Gdx.graphics.getDeltaTime();
-		TextureRegion currentFrame = runningAnimation.getKeyFrame(elapsedTime, true);
+		TextureRegion currentFrame = idleAnimation.getKeyFrame(elapsedTime, true);
 
 		batch.begin();
 		batch.draw(background.sprite1, 0, 0, 800, 480);
@@ -87,5 +89,6 @@ public class MyGdxGame extends ApplicationAdapter {
 	public void dispose () {
 		batch.dispose();
 		player.texture.dispose();
+		music.dispose();
 	}
 }
