@@ -10,9 +10,14 @@ public class Player {
     Sprite sprite;
     Rectangle rectangle;
     PlayerState state;
+    Direction direction;
 
     enum PlayerState {
         IDLE, RUN
+    }
+
+    enum Direction {
+        LEFT, RIGHT
     }
 
     Player() {
