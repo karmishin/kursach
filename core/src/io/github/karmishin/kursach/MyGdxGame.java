@@ -25,7 +25,7 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     public void create() {
         runningAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/running.atlas"));
-        runningAnimation = new Animation<TextureRegion>(0.033f, runningAtlas.getRegions());
+        runningAnimation = new Animation<TextureRegion>(0.05f, runningAtlas.getRegions());
         idleAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/idle.atlas"));
         idleAnimation = new Animation<TextureRegion>(0.1f, idleAtlas.getRegions());
 
@@ -35,7 +35,7 @@ public class MyGdxGame extends ApplicationAdapter {
         batch = new SpriteBatch();
 
         music = Gdx.audio.newMusic(Gdx.files.internal("music/golosovanie.mp3"));
-        music.setVolume(1);
+        music.setVolume(0);
         music.play();
     }
 
@@ -53,11 +53,13 @@ public class MyGdxGame extends ApplicationAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             player.rectangle.x -= 100 * Gdx.graphics.getDeltaTime();
             player.state = Player.PlayerState.RUN;
+            player.direction = Player.Direction.LEFT;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             player.rectangle.x += 100 * Gdx.graphics.getDeltaTime();
             player.state = Player.PlayerState.RUN;
+            player.direction = Player.Direction.RIGHT;
         }
 
         batch.setProjectionMatrix(camera.combined);
@@ -67,15 +69,18 @@ public class MyGdxGame extends ApplicationAdapter {
         batch.draw(background.sprite3, 0, 0, 800, 480);
         batch.draw(background.sprite4, 0, 0, 800, 480);
         batch.draw(background.sprite5, 0, 0, 800, 480);
-        if (player.state == Player.PlayerState.IDLE) {
-            batch.draw(idleFrame, player.rectangle.x, player.rectangle.y);
-        } else if (player.state == Player.PlayerState.RUN) {
-            batch.draw(runningFrame, player.rectangle.x, player.rectangle.y);
+
+        switch (player.state) {
+            case IDLE:
+                    boolean flip = (player.direction == Player.Direction.LEFT);
+                    // todo
+                break;
+            case RUN:
+                batch.draw(runningFrame, player.rectangle.x, player.rectangle.y);
+                break;
         }
 
         batch.end();
-
-
     }
 
     @Override
