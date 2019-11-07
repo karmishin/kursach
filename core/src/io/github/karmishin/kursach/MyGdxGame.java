@@ -20,6 +20,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private SpriteBatch batch;
     private Music music;
     private float elapsedTime = 0;
+    private boolean IsFliped = false;
 
 
     @Override
@@ -73,10 +74,15 @@ public class MyGdxGame extends ApplicationAdapter {
         switch (player.state) {
             case IDLE:
                     boolean flip = (player.direction == Player.Direction.LEFT);
-                    // todo
+                    batch.draw(idleFrame, flip ? player.rectangle.x + player.rectangle.width : player.rectangle.x,
+                            player.rectangle.y,flip ? -player.rectangle.width : player.rectangle.width,
+                            player.rectangle.height);
                 break;
             case RUN:
-                batch.draw(runningFrame, player.rectangle.x, player.rectangle.y);
+                 flip = (player.direction == Player.Direction.LEFT);
+                batch.draw(runningFrame, flip ? player.rectangle.x + player.rectangle.width : player.rectangle.x,
+                        player.rectangle.y,flip ? -player.rectangle.width : player.rectangle.width,
+                        player.rectangle.height);
                 break;
         }
 
