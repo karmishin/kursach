@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 
 public class Player {
     Texture texture;
@@ -11,6 +13,9 @@ public class Player {
     Rectangle rectangle;
     PlayerState state;
     Direction direction;
+
+    BodyDef bodyDef;
+    Body body;
 
     enum PlayerState {
         IDLE, RUN
@@ -21,6 +26,10 @@ public class Player {
     }
 
     Player() {
+        bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(100, 100);
+
         rectangle = new Rectangle();
 
         rectangle.x = 400;

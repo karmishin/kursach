@@ -10,8 +10,14 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class MyGdxGame extends ApplicationAdapter {
+    private World world;
+    Box2DDebugRenderer debugRenderer;
+
     private Background background;
     private Player player = new Player();
     private Animation<TextureRegion> runningAnimation, idleAnimation;
@@ -20,11 +26,14 @@ public class MyGdxGame extends ApplicationAdapter {
     private SpriteBatch batch;
     private Music music;
     private float elapsedTime = 0;
-    private boolean IsFliped = false;
-
 
     @Override
     public void create() {
+        world = new World(new Vector2(0, -10), true);
+        debugRenderer = new Box2DDebugRenderer();
+
+        player.body = world.createBody(player.bodyDef);
+
         runningAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/running.atlas"));
         runningAnimation = new Animation<TextureRegion>(0.05f, runningAtlas.getRegions());
         idleAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/idle.atlas"));
@@ -51,10 +60,11 @@ public class MyGdxGame extends ApplicationAdapter {
 
         player.state = Player.PlayerState.IDLE;
 
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player.rectangle.x -= 100 * Gdx.graphics.getDeltaTime();
-            player.state = Player.PlayerState.RUN;
-            player.direction = Player.Direction.LEFT;
+        Vector2 vel = this.player.body.getLinearVelocity();
+        Vector2 pos = this.player.body.getPosition();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A) && vel.x > -1) {
+            player.body.applyLinearImpulse(-0.80f, 0, pos.x, pos.y, true);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
@@ -74,19 +84,22 @@ public class MyGdxGame extends ApplicationAdapter {
         switch (player.state) {
             case IDLE:
                     boolean flip = (player.direction == Player.Direction.LEFT);
-                    batch.draw(idleFrame, flip ? player.rectangle.x + player.rectangle.width : player.rectangle.x,
-                            player.rectangle.y,flip ? -player.rectangle.width : player.rectangle.width,
+                    batch.draw(idleFrame, flip ? pos.x + player.rectangle.width : pos.x,
+                            pos.y,flip ? -player.rectangle.width : player.rectangle.width,
                             player.rectangle.height);
                 break;
             case RUN:
                  flip = (player.direction == Player.Direction.LEFT);
-                batch.draw(runningFrame, flip ? player.rectangle.x + player.rectangle.width : player.rectangle.x,
-                        player.rectangle.y,flip ? -player.rectangle.width : player.rectangle.width,
+                batch.draw(runningFrame, flip ? pos.x + player.rectangle.width : pos.x,
+                        pos.y,flip ? -player.rectangle.width : player.rectangle.width,
                         player.rectangle.height);
                 break;
         }
 
         batch.end();
+
+        debugRenderer.render(world, camera.combined);
+        world.step(1/60f, 6, 2);
     }
 
     @Override
