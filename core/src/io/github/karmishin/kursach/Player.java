@@ -28,12 +28,12 @@ public class Player {
     Player() {
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(100, 100);
+        bodyDef.position.set(10,50);
 
         rectangle = new Rectangle();
 
         rectangle.x = 400;
-        rectangle.y = 20;
+        rectangle.y = 50;
         rectangle.width = 21;
         rectangle.height = 35;
     }

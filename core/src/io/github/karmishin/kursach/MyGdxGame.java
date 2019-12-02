@@ -10,7 +10,12 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -26,11 +31,14 @@ public class MyGdxGame extends ApplicationAdapter {
     private SpriteBatch batch;
     private Music music;
     private float elapsedTime = 0;
+    private OrthogonalTiledMapRenderer tmr;
+    private TiledMap map;
 
     @Override
     public void create() {
         world = new World(new Vector2(0, -10), true);
         debugRenderer = new Box2DDebugRenderer();
+
 
         player.body = world.createBody(player.bodyDef);
 
@@ -47,6 +55,10 @@ public class MyGdxGame extends ApplicationAdapter {
         music = Gdx.audio.newMusic(Gdx.files.internal("music/golosovanie.mp3"));
         music.setVolume(0);
         music.play();
+
+        map = new TmxMapLoader().load("map/level.tmx");
+        tmr = new OrthogonalTiledMapRenderer(map);
+        tmr.setView(camera);
     }
 
     @Override
@@ -54,6 +66,14 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         elapsedTime += Gdx.graphics.getDeltaTime();
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
+        batch.draw(background.sprite1, 0, 0, 800, 480);
+        batch.draw(background.sprite2, 0, 0, 800, 480);
+        batch.draw(background.sprite3, 0, 0, 800, 480);
+        batch.draw(background.sprite4, 0, 0, 800, 480);
+        batch.draw(background.sprite5, 0, 0, 800, 480);
+
 
         TextureRegion idleFrame = idleAnimation.getKeyFrame(elapsedTime, true);
         TextureRegion runningFrame = runningAnimation.getKeyFrame(elapsedTime, true);
@@ -63,8 +83,9 @@ public class MyGdxGame extends ApplicationAdapter {
         Vector2 vel = this.player.body.getLinearVelocity();
         Vector2 pos = this.player.body.getPosition();
 
-        if (Gdx.input.isKeyPressed(Input.Keys.A) && vel.x > -1) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             player.body.applyLinearImpulse(-0.80f, 0, pos.x, pos.y, true);
+            player.state = Player.PlayerState.RUN;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
@@ -73,13 +94,7 @@ public class MyGdxGame extends ApplicationAdapter {
             player.direction = Player.Direction.RIGHT;
         }
 
-        batch.setProjectionMatrix(camera.combined);
-        batch.begin();
-        batch.draw(background.sprite1, 0, 0, 800, 480);
-        batch.draw(background.sprite2, 0, 0, 800, 480);
-        batch.draw(background.sprite3, 0, 0, 800, 480);
-        batch.draw(background.sprite4, 0, 0, 800, 480);
-        batch.draw(background.sprite5, 0, 0, 800, 480);
+
 
         switch (player.state) {
             case IDLE:
@@ -95,9 +110,8 @@ public class MyGdxGame extends ApplicationAdapter {
                         player.rectangle.height);
                 break;
         }
-
         batch.end();
-
+        tmr.render();
         debugRenderer.render(world, camera.combined);
         world.step(1/60f, 6, 2);
     }
@@ -106,5 +120,8 @@ public class MyGdxGame extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         music.dispose();
+        tmr.dispose();
+        map.dispose();
+
     }
 }
