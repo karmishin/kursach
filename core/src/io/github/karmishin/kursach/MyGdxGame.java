@@ -128,6 +128,10 @@ public class MyGdxGame extends ApplicationAdapter {
             player.state = Player.PlayerState.JUMP;
         }
 
+        if (player.body.getLinearVelocity().y < 0) {
+            player.state = Player.PlayerState.FALL;
+        }
+
         player.body.setLinearVelocity(velocityX, velocityY);
 
         switch (player.state) {
