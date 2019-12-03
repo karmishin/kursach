@@ -27,6 +27,6 @@ public class Player {
 
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(21,35);
+        bodyDef.position.set(21,30);
     }
 }
