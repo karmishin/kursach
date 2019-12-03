@@ -29,6 +29,7 @@ public class GameScreen implements Screen {
     private float elapsedTime = 0;
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     private TiledMap map;
+    private Platform platform;
 
     public GameScreen(Game game) {
         this.game = game;
@@ -52,6 +53,7 @@ public class GameScreen implements Screen {
 
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
         tiledMapRenderer.setView(camera);
+        platform = new Platform(world, map);
 
         background = new Background();
         ground = new Ground(world, camera);
