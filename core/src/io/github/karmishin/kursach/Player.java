@@ -18,7 +18,7 @@ public class Player {
     Body body;
 
     enum PlayerState {
-        IDLE, RUN
+        IDLE, RUN, JUMP
     }
 
     enum Direction {

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -24,6 +25,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private Player player = new Player();
     private Ground ground;
     private Animation<TextureRegion> runningAnimation, idleAnimation;
+    private Texture jumpTexture;
     private TextureAtlas runningAtlas, idleAtlas;
     private OrthographicCamera camera;
     private SpriteBatch batch;
@@ -39,7 +41,6 @@ public class MyGdxGame extends ApplicationAdapter {
         world = new World(new Vector2(0, -10), true);
         debugRenderer = new Box2DDebugRenderer();
 
-
         player.body = world.createBody(player.bodyDef);
         player.shape = new PolygonShape();
         player.shape.setAsBox(11,25, new Vector2(11,20), 0);
@@ -54,6 +55,7 @@ public class MyGdxGame extends ApplicationAdapter {
         runningAnimation = new Animation<TextureRegion>(0.05f, runningAtlas.getRegions());
         idleAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/idle.atlas"));
         idleAnimation = new Animation<TextureRegion>(0.1f, idleAtlas.getRegions());
+        jumpTexture = new Texture("character/sprites/jump outline.png");
 
         background = new Background();
         camera = new OrthographicCamera();
@@ -70,7 +72,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
         ground = new Ground();
         ground.bodyDef = new BodyDef();
-        ground.bodyDef.position.set(new Vector2(0, 10));
+        ground.bodyDef.position.set(new Vector2(0, 20));
         ground.groundBody = world.createBody(ground.bodyDef);
         groundShape = new PolygonShape();
         ground.groundBox.setAsBox(camera.viewportWidth, 10.0f);
@@ -100,29 +102,31 @@ public class MyGdxGame extends ApplicationAdapter {
         Vector2 pos = this.player.body.getPosition();
 
         float velocityX = 0;
-        float velocityY = -10.0f;
+        float velocityY = -100.0f;
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 //            player.body.applyLinearImpulse(-0.80f, 0, this.player.body.getPosition().x, this.player.body.getPosition().y, true);
-            velocityX = -30.0f;
-            player.body.setLinearVelocity(-100.0f, 0);
+            velocityX = -100.0f;
+//            player.body.setLinearVelocity(-100.0f, 0);
             player.state = Player.PlayerState.RUN;
             player.direction = Player.Direction.LEFT;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            velocityX = 30.0f;
+            velocityX = 100.0f;
 //            player.body.applyLinearImpulse(0.80f, 1, this.player.body.getPosition().x, this.player.body.getPosition().y, true);
-            player.body.setLinearVelocity(new Vector2(100.0f, 0));
+//            player.body.setLinearVelocity(new Vector2(100.0f, 0));
             player.state = Player.PlayerState.RUN;
             player.direction = Player.Direction.RIGHT;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            velocityY = 30.0f;
+            velocityY = 100.0f;
+            player.state = Player.PlayerState.JUMP;
         }
 
         player.body.setLinearVelocity(velocityX, velocityY);
+
         switch (player.state) {
             case IDLE:
                     boolean flip = (player.direction == Player.Direction.LEFT);
@@ -133,6 +137,13 @@ public class MyGdxGame extends ApplicationAdapter {
             case RUN:
                  flip = (player.direction == Player.Direction.LEFT);
                 batch.draw(runningFrame, flip ? pos.x + player.width : pos.x,
+                        pos.y,flip ? -player.width : player.width,
+                        player.height);
+                break;
+
+            case JUMP:
+                flip = (player.direction == Player.Direction.LEFT);
+                batch.draw(jumpTexture, flip ? pos.x + player.width : pos.x,
                         pos.y,flip ? -player.width : player.width,
                         player.height);
                 break;
