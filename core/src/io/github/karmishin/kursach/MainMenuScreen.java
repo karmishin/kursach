@@ -33,10 +33,11 @@ public class MainMenuScreen implements Screen {
         game.batch.begin();
         game.font.draw(game.batch, "Welcome to Kursach: The Game!", 100, 150);
         game.font.draw(game.batch, "Press ANY KEY to begin... ", 100, 100);
+        game.font.draw(game.batch, "(c) 2019. Biba&Boba Entertainment. All rights reserved.", 20, 20);
         game.batch.end();
 
         if (Gdx.input.isTouched() || Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-            game.setScreen(new MyGdxGame(game));
+            game.setScreen(new GameScreen(game));
             dispose();
         }
 
