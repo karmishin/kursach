@@ -43,7 +43,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
         player.body = world.createBody(player.bodyDef);
         player.shape = new PolygonShape();
-        player.shape.setAsBox(11,25, new Vector2(11,20), 0);
+        player.shape.setAsBox(11,21, new Vector2(11,20), 0);
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = player.shape;
         fixtureDef.density=0.5f;
@@ -63,7 +63,7 @@ public class MyGdxGame extends ApplicationAdapter {
         batch = new SpriteBatch();
 
         music = Gdx.audio.newMusic(Gdx.files.internal("music/golosovanie.mp3"));
-        music.setVolume(0);
+        music.setVolume(1);
         music.play();
 
         map = new TmxMapLoader().load("map/level.tmx");
