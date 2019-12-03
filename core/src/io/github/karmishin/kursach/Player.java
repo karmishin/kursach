@@ -6,19 +6,19 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 public class Player {
-    Texture texture;
-    Sprite sprite;
-    Rectangle rectangle;
+    int width, height;
     PlayerState state;
     Direction direction;
+    PolygonShape shape;
 
     BodyDef bodyDef;
     Body body;
 
     enum PlayerState {
-        IDLE, RUN
+        IDLE, RUN, JUMP
     }
 
     enum Direction {
@@ -26,15 +26,11 @@ public class Player {
     }
 
     Player() {
+        width = 21;
+        height = 35;
+
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(10,50);
-
-        rectangle = new Rectangle();
-
-        rectangle.x = 400;
-        rectangle.y = 50;
-        rectangle.width = 21;
-        rectangle.height = 35;
+        bodyDef.position.set(21,35);
     }
 }
