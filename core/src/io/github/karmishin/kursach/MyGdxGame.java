@@ -32,7 +32,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private OrthogonalTiledMapRenderer tmr;
     private TiledMap map;
     private PolygonShape groundShape;
-
+    private PolygonShape playerShape;
 
     @Override
     public void create() {
@@ -41,14 +41,14 @@ public class MyGdxGame extends ApplicationAdapter {
 
 
         player.body = world.createBody(player.bodyDef);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(20,20);
+        player.shape = new PolygonShape();
+        player.shape.setAsBox(11,25, new Vector2(11,20), 0);
         FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
+        fixtureDef.shape = player.shape;
         fixtureDef.density=0.5f;
         fixtureDef.friction = 0.4f;
         fixtureDef.restitution = 0.6f;
-        Fixture fixture = player.body.createFixture(fixtureDef);
+        player.body.createFixture(fixtureDef);
 
         runningAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/running.atlas"));
         runningAnimation = new Animation<TextureRegion>(0.05f, runningAtlas.getRegions());
@@ -83,13 +83,13 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         elapsedTime += Gdx.graphics.getDeltaTime();
         batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
         batch.draw(background.sprite1, 0, 0, 800, 480);
         batch.draw(background.sprite2, 0, 0, 800, 480);
         batch.draw(background.sprite3, 0, 0, 800, 480);
         batch.draw(background.sprite4, 0, 0, 800, 480);
         batch.draw(background.sprite5, 0, 0, 800, 480);
-
 
         TextureRegion idleFrame = idleAnimation.getKeyFrame(elapsedTime, true);
         TextureRegion runningFrame = runningAnimation.getKeyFrame(elapsedTime, true);
@@ -99,31 +99,42 @@ public class MyGdxGame extends ApplicationAdapter {
         Vector2 vel = this.player.body.getLinearVelocity();
         Vector2 pos = this.player.body.getPosition();
 
+        float velocityX = 0;
+        float velocityY = -10.0f;
+
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.body.applyLinearImpulse(-0.80f, 0, pos.x, pos.y, true);
+//            player.body.applyLinearImpulse(-0.80f, 0, this.player.body.getPosition().x, this.player.body.getPosition().y, true);
+            velocityX = -30.0f;
+            player.body.setLinearVelocity(-100.0f, 0);
             player.state = Player.PlayerState.RUN;
+            player.direction = Player.Direction.LEFT;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            player.rectangle.x += 100 * Gdx.graphics.getDeltaTime();
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            velocityX = 30.0f;
+//            player.body.applyLinearImpulse(0.80f, 1, this.player.body.getPosition().x, this.player.body.getPosition().y, true);
+            player.body.setLinearVelocity(new Vector2(100.0f, 0));
             player.state = Player.PlayerState.RUN;
             player.direction = Player.Direction.RIGHT;
         }
 
+        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            velocityY = 30.0f;
+        }
 
-
+        player.body.setLinearVelocity(velocityX, velocityY);
         switch (player.state) {
             case IDLE:
                     boolean flip = (player.direction == Player.Direction.LEFT);
-                    batch.draw(idleFrame, flip ? pos.x + player.rectangle.width : pos.x,
-                            pos.y,flip ? -player.rectangle.width : player.rectangle.width,
-                            player.rectangle.height);
+                    batch.draw(idleFrame, flip ? pos.x + player.width : pos.x,
+                            pos.y,flip ? -player.width : player.width,
+                            player.height);
                 break;
             case RUN:
                  flip = (player.direction == Player.Direction.LEFT);
-                batch.draw(runningFrame, flip ? pos.x + player.rectangle.width : pos.x,
-                        pos.y,flip ? -player.rectangle.width : player.rectangle.width,
-                        player.rectangle.height);
+                batch.draw(runningFrame, flip ? pos.x + player.width : pos.x,
+                        pos.y,flip ? -player.width : player.width,
+                        player.height);
                 break;
         }
         batch.end();
@@ -140,7 +151,5 @@ public class MyGdxGame extends ApplicationAdapter {
         tmr.dispose();
         map.dispose();
         ground.groundBox.dispose();
-
-
     }
 }
