@@ -17,9 +17,9 @@ public class Player {
     PolygonShape shape;
     BodyDef bodyDef;
     Body body;
-    public TextureRegion idleFrame, runningFrame, fallFrame;
     Vector2 position;
 
+    public TextureRegion idleFrame, runningFrame, fallFrame;
     public Animation<TextureRegion> runningAnimation, idleAnimation, fallAnimation;
     public Texture jumpTexture;
     public TextureAtlas runningAtlas, idleAtlas, fallAtlas;
