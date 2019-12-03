@@ -24,9 +24,9 @@ public class MyGdxGame extends ApplicationAdapter {
     private Background background;
     private Player player = new Player();
     private Ground ground;
-    private Animation<TextureRegion> runningAnimation, idleAnimation;
+    private Animation<TextureRegion> runningAnimation, idleAnimation, fallAnimation;
     private Texture jumpTexture;
-    private TextureAtlas runningAtlas, idleAtlas;
+    private TextureAtlas runningAtlas, idleAtlas, fallAtlas;
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private Music music;
@@ -56,6 +56,8 @@ public class MyGdxGame extends ApplicationAdapter {
         idleAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/idle.atlas"));
         idleAnimation = new Animation<TextureRegion>(0.1f, idleAtlas.getRegions());
         jumpTexture = new Texture("character/sprites/jump outline.png");
+        fallAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/fall.atlas"));
+        fallAnimation = new Animation<TextureRegion>(0.1f, fallAtlas.getRegions());
 
         background = new Background();
         camera = new OrthographicCamera();
@@ -95,6 +97,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
         TextureRegion idleFrame = idleAnimation.getKeyFrame(elapsedTime, true);
         TextureRegion runningFrame = runningAnimation.getKeyFrame(elapsedTime, true);
+        TextureRegion fallFrame = fallAnimation.getKeyFrame(elapsedTime, true);
 
         player.state = Player.PlayerState.IDLE;
 
@@ -135,18 +138,22 @@ public class MyGdxGame extends ApplicationAdapter {
                             player.height);
                 break;
             case RUN:
-                 flip = (player.direction == Player.Direction.LEFT);
+                flip = (player.direction == Player.Direction.LEFT);
                 batch.draw(runningFrame, flip ? pos.x + player.width : pos.x,
                         pos.y,flip ? -player.width : player.width,
                         player.height);
                 break;
-
             case JUMP:
                 flip = (player.direction == Player.Direction.LEFT);
                 batch.draw(jumpTexture, flip ? pos.x + player.width : pos.x,
                         pos.y,flip ? -player.width : player.width,
                         player.height);
                 break;
+            case FALL:
+                flip = (player.direction == Player.Direction.LEFT);
+                batch.draw(fallFrame, flip ? pos.x + player.width : pos.x,
+                        pos.y, flip ? -player.width : player.width,
+                        player.height);
         }
         batch.end();
         tmr.render();

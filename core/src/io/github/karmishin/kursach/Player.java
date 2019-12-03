@@ -1,9 +1,5 @@
 package io.github.karmishin.kursach;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -18,7 +14,7 @@ public class Player {
     Body body;
 
     enum PlayerState {
-        IDLE, RUN, JUMP
+        IDLE, RUN, JUMP, FALL
     }
 
     enum Direction {
