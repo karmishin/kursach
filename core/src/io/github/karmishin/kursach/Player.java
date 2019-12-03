@@ -19,10 +19,10 @@ public class Player {
     Body body;
     Vector2 position;
 
-    public TextureRegion idleFrame, runningFrame, fallFrame;
-    public Animation<TextureRegion> runningAnimation, idleAnimation, fallAnimation;
-    public Texture jumpTexture;
-    public TextureAtlas runningAtlas, idleAtlas, fallAtlas;
+    public TextureRegion idleFrame, runningFrame;
+    public Animation<TextureRegion> runningAnimation, idleAnimation;
+    public Texture jumpTexture, landingTexture;
+    public TextureAtlas runningAtlas, idleAtlas;
     Vector2 velocity = new Vector2();
 
     enum PlayerState {
@@ -60,14 +60,12 @@ public class Player {
         idleAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/idle.atlas"));
         idleAnimation = new Animation<TextureRegion>(0.1f, idleAtlas.getRegions());
         jumpTexture = new Texture("character/sprites/jump outline.png");
-        fallAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/fall.atlas"));
-        fallAnimation = new Animation<TextureRegion>(0.1f, fallAtlas.getRegions());
+        landingTexture = new Texture("character/sprites/landing outline.png");
     }
 
     public void getKeyFrames(float elapsedTime) {
         idleFrame = idleAnimation.getKeyFrame(elapsedTime, true);
         runningFrame = runningAnimation.getKeyFrame(elapsedTime, true);
-        fallFrame = fallAnimation.getKeyFrame(elapsedTime, true);
     }
 
     public void updatePosition() {
@@ -129,7 +127,7 @@ public class Player {
                 break;
             case FALL:
                 flip = (direction == Direction.LEFT);
-                batch.draw(fallFrame, flip ? position.x + width : position.x,
+                batch.draw(landingTexture, flip ? position.x + width : position.x,
                         position.y, flip ? -width : width,
                         height);
         }
