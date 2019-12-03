@@ -16,14 +16,13 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
-import javax.swing.*;
-
 public class MyGdxGame extends ApplicationAdapter {
     private World world;
     Box2DDebugRenderer debugRenderer;
 
     private Background background;
     private Player player = new Player();
+    private Ground ground;
     private Animation<TextureRegion> runningAnimation, idleAnimation;
     private TextureAtlas runningAtlas, idleAtlas;
     private OrthographicCamera camera;
@@ -32,6 +31,7 @@ public class MyGdxGame extends ApplicationAdapter {
     private float elapsedTime = 0;
     private OrthogonalTiledMapRenderer tmr;
     private TiledMap map;
+    private PolygonShape groundShape;
 
 
     @Override
@@ -67,6 +67,14 @@ public class MyGdxGame extends ApplicationAdapter {
         map = new TmxMapLoader().load("map/level.tmx");
         tmr = new OrthogonalTiledMapRenderer(map);
         tmr.setView(camera);
+
+        ground = new Ground();
+        ground.bodyDef = new BodyDef();
+        ground.bodyDef.position.set(new Vector2(0, 10));
+        ground.groundBody = world.createBody(ground.bodyDef);
+        groundShape = new PolygonShape();
+        ground.groundBox.setAsBox(camera.viewportWidth, 10.0f);
+        ground.groundBody.createFixture(ground.groundBox, 10.0f);
     }
 
     @Override
@@ -121,6 +129,7 @@ public class MyGdxGame extends ApplicationAdapter {
         batch.end();
         tmr.render();
         debugRenderer.render(world, camera.combined);
+
         world.step(1/60f, 6, 2);
     }
 
@@ -130,6 +139,7 @@ public class MyGdxGame extends ApplicationAdapter {
         music.dispose();
         tmr.dispose();
         map.dispose();
+        ground.groundBox.dispose();
 
 
     }
