@@ -3,6 +3,7 @@ package io.github.karmishin.kursach;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 class Background {
      private Texture texture1, texture2, texture3, texture4, texture5;
@@ -20,5 +21,13 @@ class Background {
           sprite3 = new Sprite(texture3);
           sprite4 = new Sprite(texture4);
           sprite5 = new Sprite(texture5);
+     }
+
+     public void drawBackground(SpriteBatch batch) {
+          batch.draw(sprite1, 0, 0, 800, 480);
+          batch.draw(sprite2, 0, 0, 800, 480);
+          batch.draw(sprite3, 0, 0, 800, 480);
+          batch.draw(sprite4, 0, 0, 800, 480);
+          batch.draw(sprite5, 0, 0, 800, 480);
      }
 }
