@@ -38,6 +38,13 @@ public class MyGdxGame extends ApplicationAdapter {
     public void create() {
         world = new World(new Vector2(0, -10), true);
         debugRenderer = new Box2DDebugRenderer();
+        BodyDef groundBodyDef = new BodyDef();
+        groundBodyDef.position.set(new Vector2(0,10));
+        Body groundBody = world.createBody(groundBodyDef);
+
+        PolygonShape groundBox = new PolygonShape();
+        groundBox.setAsBox(camera.viewportWidth,10.0f);
+        groundBody.createFixture(groundBox,0.0f);
 
 
         player.body = world.createBody(player.bodyDef);
@@ -140,7 +147,6 @@ public class MyGdxGame extends ApplicationAdapter {
         tmr.dispose();
         map.dispose();
         ground.groundBox.dispose();
-
 
     }
 }
