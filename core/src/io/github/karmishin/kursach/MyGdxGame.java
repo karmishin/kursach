@@ -6,32 +6,29 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 
 public class MyGdxGame extends ApplicationAdapter {
     private World world;
-    Box2DDebugRenderer debugRenderer;
+    private Box2DDebugRenderer debugRenderer;
 
     private Background background;
     private Player player = new Player();
     private Ground ground;
-    private Animation<TextureRegion> runningAnimation, idleAnimation, fallAnimation;
-    private Texture jumpTexture;
-    private TextureAtlas runningAtlas, idleAtlas, fallAtlas;
+
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private Music music;
     private float elapsedTime = 0;
-    private OrthogonalTiledMapRenderer tmr;
+    private OrthogonalTiledMapRenderer tiledMapRenderer;
     private TiledMap map;
     private PolygonShape groundShape;
     private PolygonShape playerShape;
@@ -41,50 +38,32 @@ public class MyGdxGame extends ApplicationAdapter {
         world = new World(new Vector2(0, -10), true);
         debugRenderer = new Box2DDebugRenderer();
 
-        player.body = world.createBody(player.bodyDef);
-        player.shape = new PolygonShape();
-        player.shape.setAsBox(11,21, new Vector2(11,20), 0);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = player.shape;
-        fixtureDef.density=0.5f;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.6f;
-        player.body.createFixture(fixtureDef);
+        player.createPlayer(world);
+        player.createResources();
 
-        runningAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/running.atlas"));
-        runningAnimation = new Animation<TextureRegion>(0.05f, runningAtlas.getRegions());
-        idleAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/idle.atlas"));
-        idleAnimation = new Animation<TextureRegion>(0.1f, idleAtlas.getRegions());
-        jumpTexture = new Texture("character/sprites/jump outline.png");
-        fallAtlas = new TextureAtlas(Gdx.files.internal("character/sprites/fall.atlas"));
-        fallAnimation = new Animation<TextureRegion>(0.1f, fallAtlas.getRegions());
-
-        background = new Background();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
-        batch = new SpriteBatch();
 
         music = Gdx.audio.newMusic(Gdx.files.internal("music/golosovanie.mp3"));
-        music.setVolume(1);
+        music.setVolume(0);
         music.play();
 
         map = new TmxMapLoader().load("map/level.tmx");
-        tmr = new OrthogonalTiledMapRenderer(map);
-        tmr.setView(camera);
 
-        ground = new Ground();
-        ground.bodyDef = new BodyDef();
-        ground.bodyDef.position.set(new Vector2(0, 20));
-        ground.groundBody = world.createBody(ground.bodyDef);
-        groundShape = new PolygonShape();
-        ground.groundBox.setAsBox(camera.viewportWidth, 10.0f);
-        ground.groundBody.createFixture(ground.groundBox, 10.0f);
+        tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
+        tiledMapRenderer.setView(camera);
+
+        background = new Background();
+        ground = new Ground(world, camera);
+
+        batch = new SpriteBatch();
     }
 
     @Override
     public void render() {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         elapsedTime += Gdx.graphics.getDeltaTime();
         batch.setProjectionMatrix(camera.combined);
 
@@ -95,9 +74,9 @@ public class MyGdxGame extends ApplicationAdapter {
         batch.draw(background.sprite4, 0, 0, 800, 480);
         batch.draw(background.sprite5, 0, 0, 800, 480);
 
-        TextureRegion idleFrame = idleAnimation.getKeyFrame(elapsedTime, true);
-        TextureRegion runningFrame = runningAnimation.getKeyFrame(elapsedTime, true);
-        TextureRegion fallFrame = fallAnimation.getKeyFrame(elapsedTime, true);
+        TextureRegion idleFrame = player.idleAnimation.getKeyFrame(elapsedTime, true);
+        TextureRegion runningFrame = player.runningAnimation.getKeyFrame(elapsedTime, true);
+        TextureRegion fallFrame = player.fallAnimation.getKeyFrame(elapsedTime, true);
 
         player.state = Player.PlayerState.IDLE;
 
@@ -149,7 +128,7 @@ public class MyGdxGame extends ApplicationAdapter {
                 break;
             case JUMP:
                 flip = (player.direction == Player.Direction.LEFT);
-                batch.draw(jumpTexture, flip ? pos.x + player.width : pos.x,
+                batch.draw(player.jumpTexture, flip ? pos.x + player.width : pos.x,
                         pos.y,flip ? -player.width : player.width,
                         player.height);
                 break;
@@ -160,7 +139,7 @@ public class MyGdxGame extends ApplicationAdapter {
                         player.height);
         }
         batch.end();
-        tmr.render();
+        tiledMapRenderer.render();
         debugRenderer.render(world, camera.combined);
 
         world.step(1/60f, 6, 2);
@@ -170,7 +149,7 @@ public class MyGdxGame extends ApplicationAdapter {
     public void dispose() {
         batch.dispose();
         music.dispose();
-        tmr.dispose();
+        tiledMapRenderer.dispose();
         map.dispose();
         ground.groundBox.dispose();
     }
