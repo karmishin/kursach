@@ -39,11 +39,12 @@ public class Player {
 
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(21,30);
+        bodyDef.position.set(11, 21);
     }
 
     public void createPlayer(World world) {
         body = world.createBody(this.bodyDef);
+        body.setFixedRotation(true);
         this.shape = new PolygonShape();
         this.shape.setAsBox(11, 21, new Vector2(11, 20), 0);
         FixtureDef fixtureDef = new FixtureDef();
@@ -73,7 +74,6 @@ public class Player {
     }
 
     public void control() {
-
         velocity.x = 0;
         velocity.y = -100f;
 
