@@ -1,17 +1,16 @@
 package io.github.karmishin.kursach;
 
-import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.Array;
 
 public class Platform {
     World world;
     TiledMap map;
-    Camera camera;
     float tileSize;
 
     public Platform(World world, TiledMap map) {
@@ -21,11 +20,12 @@ public class Platform {
     }
 
     private void buildBuildingBodies() {
-        Array<RectangleMapObject> objects = map.getLayers().get("Слой тайлов 1").getObjects().getByType(RectangleMapObject.class);
-        tileSize = 32;
+        MapObjects objects = map.getLayers().get(1).getObjects();
+        tileSize = map.getProperties().get("tilewidth", Integer.class);
+        tileSize = 8;
 
-        for (RectangleMapObject rectangleMapObject : objects) {
-            Rectangle rectangle = rectangleMapObject.getRectangle();
+        for (MapObject mapObject : objects) {
+            Rectangle rectangle = ((RectangleMapObject) mapObject).getRectangle();
 
             BodyDef bodyDef = new BodyDef();
             bodyDef.type = BodyDef.BodyType.StaticBody;
