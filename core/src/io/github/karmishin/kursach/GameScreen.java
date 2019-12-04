@@ -49,7 +49,7 @@ public class GameScreen implements Screen {
         music.setVolume(0);
         music.play();
 
-        map = new TmxMapLoader().load("map/level1.tmx");
+        map = new TmxMapLoader().load("map/level.tmx");
 
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
         tiledMapRenderer.setView(camera);

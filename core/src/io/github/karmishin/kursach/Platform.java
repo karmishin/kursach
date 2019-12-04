@@ -22,7 +22,7 @@ public class Platform {
     private void buildBuildingBodies() {
         MapObjects objects = map.getLayers().get(1).getObjects();
         tileSize = map.getProperties().get("tilewidth", Integer.class);
-        tileSize = 8;
+
 
         for (MapObject mapObject : objects) {
             Rectangle rectangle = ((RectangleMapObject) mapObject).getRectangle();
@@ -32,7 +32,7 @@ public class Platform {
             Body body = world.createBody(bodyDef);
 
             Fixture fixture = body.createFixture(getShapeFromRectangle(rectangle), 10.0f);
-            fixture.setFriction(0.4f);
+            fixture.setFriction(0.1f);
 
             body.setTransform(getTransformedCenterForRectangle(rectangle), 0);
         }
@@ -40,13 +40,15 @@ public class Platform {
 
     Shape getShapeFromRectangle(Rectangle rectangle) {
         PolygonShape polygonShape = new PolygonShape();
-        polygonShape.setAsBox(rectangle.width * 0.5F / tileSize, rectangle.height * 0.5F / tileSize);
+        polygonShape.setAsBox(rectangle.width * 0.5f, rectangle.height * 0.5f);
+
         return polygonShape;
     }
+
 
     Vector2 getTransformedCenterForRectangle(Rectangle rectangle) {
         Vector2 center = new Vector2();
         rectangle.getCenter(center);
-        return center.scl(1 / tileSize);
+        return center.scl(1);
     }
 }
