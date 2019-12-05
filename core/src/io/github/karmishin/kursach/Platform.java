@@ -32,7 +32,7 @@ public class Platform {
             Body body = world.createBody(bodyDef);
 
             Fixture fixture = body.createFixture(getShapeFromRectangle(rectangle), 10.0f);
-            fixture.setFriction(0.1f);
+            fixture.setFriction(1f);
 
             body.setTransform(getTransformedCenterForRectangle(rectangle), 0);
         }

@@ -34,7 +34,7 @@ public class GameScreen implements Screen {
     public GameScreen(Game game) {
         this.game = game;
 
-        world = new World(new Vector2(0, -10), true);
+        world = new World(new Vector2(0, -100), true);
         debugRenderer = new Box2DDebugRenderer();
 
         font = new BitmapFont();

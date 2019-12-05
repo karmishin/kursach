@@ -50,8 +50,8 @@ public class Player {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = this.shape;
         fixtureDef.density = 0.5f;
-        fixtureDef.friction = 0.4f;
-        fixtureDef.restitution = 0.6f;
+        fixtureDef.friction = 30f;
+        fixtureDef.restitution = 0;
         this.body.createFixture(fixtureDef);
     }
 
@@ -74,35 +74,40 @@ public class Player {
     }
 
     public void control() {
-        velocity.x = 0;
-        velocity.y = -100f;
+
 
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
 //            body.applyLinearImpulse(-0.80f, 0, this.body.getPosition().x, this.body.getPosition().y, true);
-            velocity.x = -100.0f;
+//            body.setLinearVelocity(-100f, body.getLinearVelocity().y);
 //            body.setLinearVelocity(-100.0f, 0);
+            body.applyLinearImpulse(new Vector2(-70000f, 0), body.getWorldCenter(), true);
             state = PlayerState.RUN;
             direction = Direction.LEFT;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            velocity.x = 100.0f;
-//            body.applyLinearImpulse(0.80f, 1, this.body.getPosition().x, this.body.getPosition().y, true);
-//            body.setLinearVelocity(new Vector2(100.0f, 0));
+            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                body.applyLinearImpulse(new Vector2(70000f, 210000f), body.getWorldCenter(), true);
+            } else {
+                body.applyLinearImpulse(new Vector2(70000f, 0), body.getWorldCenter(), true);
+            }
+
             state = PlayerState.RUN;
             direction = Direction.RIGHT;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            velocity.y = 100.0f;
+//        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+//            body.applyLinearImpulse(new Vector2(0, 210000f), body.getWorldCenter(), true);
+//            state = PlayerState.JUMP;
+//        }
+
+        if (body.getLinearVelocity().y > 0) {
             state = PlayerState.JUMP;
         }
 
         if (body.getLinearVelocity().y < 0) {
             state = PlayerState.FALL;
         }
-
-        body.setLinearVelocity(velocity);
     }
 
     public void flip(SpriteBatch batch) {
