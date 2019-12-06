@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="25" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="84">
+ <tileset firstgid="1" source="jungle.tsx"/>
+ <layer id="4" name="Tile Layer 1" width="25" height="15">
+  <data encoding="base64" compression="zlib">
+   eAHFVMENwjAMdOkKhRUoW3WPLoPEovgEJx2OoxryoJJry/HdOU5as/aZPHVym9ulj0ylbnFEVof82e0ijNU6gdhutoEr44u5R7FO+TWOfFgbySk341/4MAPgMyx56THjrG4kR2547+UOriM+nAWeo7pXVfuuaBAVNXhn4v1jPf2IBjiiLnnV/1Pj6o2sbrd3Q/H7+OZe9fahe2WczUVz0KU2MfCjGsrVi6MGZpIZ8LHnHmfMA8fZY/4Vwxnhn9wzzkz9E/73H3I=
+  </data>
+ </layer>
+ <layer id="9" name="Tile Layer 2" width="25" height="15">
+  <data encoding="base64" compression="zlib">
+   eAFjYBgFoyEwGgKjITAaAsMtBAAF3AAB
+  </data>
+ </layer>
+ <objectgroup id="5" name="Objects">
+  <object id="48" x="-40" y="-8" width="36" height="492"/>
+  <object id="49" x="-48" y="-65.3333" width="717.333" height="52"/>
+  <object id="50" x="802.667" y="-6.66667" width="48" height="497.333"/>
+  <object id="67" x="159.333" y="16" width="79.3333" height="336.667"/>
+  <object id="68" x="-2.66667" y="48" width="77.3333" height="430.667"/>
+  <object id="69" x="75.3333" y="446.333" width="246.333" height="29.6667"/>
+  <object id="70" x="321.333" y="52" width="73.3333" height="431.333"/>
+  <object id="71" x="-2.1665" y="483.167" width="802.333" height="29.6667"/>
+  <object id="72" x="481" y="18" width="77" height="367"/>
+  <object id="73" x="415.667" y="465" width="223.667" height="15"/>
+  <object id="81" x="767.667" y="0.666667" width="32" height="63.3333"/>
+  <object id="82" x="767" y="145.333" width="33" height="302"/>
+ </objectgroup>
+ <objectgroup id="10" name="Finish">
+  <object id="52" x="801.333" y="76" width="80" height="84"/>
+ </objectgroup>
+ <objectgroup id="8" name="Obstacles">
+  <object id="58" x="96.3333" y="417.667" width="191.333" height="13.6667"/>
+  <object id="59" x="288" y="320" width="31" height="16"/>
+  <object id="60" x="255.667" y="193.333" width="32.3333" height="13.6667"/>
+  <object id="61" x="288" y="64.6667" width="31" height="14"/>
+  <object id="74" x="639.667" y="464.333" width="160" height="16"/>
+  <object id="75" x="576" y="368" width="63.3333" height="15.3333"/>
+  <object id="76" x="417.333" y="432.333" width="30" height="14.6667"/>
+  <object id="77" x="415.667" y="336" width="32.6667" height="16"/>
+  <object id="78" x="448" y="239.333" width="31.6667" height="16.6667"/>
+  <object id="79" x="415.667" y="144.667" width="32" height="15.3333"/>
+  <object id="80" x="736" y="48.3333" width="32" height="15"/>
+  <object id="83" x="735.333" y="158.667" width="30.6667" height="16.6667"/>
+ </objectgroup>
+</map>

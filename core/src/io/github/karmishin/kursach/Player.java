@@ -50,6 +50,15 @@ public class Player {
             case 1:
                 spawnPoint.x = -1;
                 spawnPoint.y = 10;
+                break;
+            case 2:
+                spawnPoint.x = 5;
+                spawnPoint.y = 460;
+        }
+
+        switch (game.currentLevel) {
+            case 2:
+                jumpsLeft = 24;
         }
 
         bodyDef.position.set(spawnPoint);
