@@ -22,7 +22,7 @@ public class GameScreen implements Screen {
     private Box2DDebugRenderer debugRenderer;
     BitmapFont font;
     private Background background;
-    private Player player = new Player();
+    Player player;
     private Ground ground;
     private OrthographicCamera camera;
     SpriteBatch batch;
@@ -32,11 +32,11 @@ public class GameScreen implements Screen {
     private TiledMap map;
     private Platform platform;
     private Timer timer;
-    private int seconds;
+    int seconds;
+    private HUD hud;
 
     public GameScreen(Game game) {
         this.game = game;
-
 
         world = new World(new Vector2(0, -100), true);
         world.setContactListener(new ListenerClass(game));
@@ -44,6 +44,7 @@ public class GameScreen implements Screen {
 
         font = new BitmapFont();
 
+        player = new Player(game);
         player.createPlayer(world);
         player.createResources();
 
@@ -54,7 +55,7 @@ public class GameScreen implements Screen {
         music.setVolume(0);
         music.play();
 
-        map = new TmxMapLoader().load("map/level1.tmx");
+        map = new TmxMapLoader().load("map/level" + game.currentLevel + ".tmx");
 
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
         tiledMapRenderer.setView(camera);
@@ -73,6 +74,7 @@ public class GameScreen implements Screen {
             }
         }, 1, 1);
 
+        hud = new HUD(game, this);
     }
 
     @Override
@@ -82,7 +84,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-
+        world.step(1 / 60f, 6, 2);
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -93,16 +95,16 @@ public class GameScreen implements Screen {
         batch.begin();
 
         background.drawBackground(batch);
-        font.draw(batch, "Jumps left: " + player.jumpsLeft, 50, 470);
-        font.draw(batch, "Time: " + seconds, 50, 450);
-        font.draw(batch, player.body.getPosition().toString(), 50, 430);
+
         player.getKeyFrames(elapsedTime);
         player.state = Player.PlayerState.IDLE;
         player.updatePosition();
         player.control();
         player.flip(batch);
 
+        hud.renderHUD();
         batch.end();
+
         tiledMapRenderer.render();
 
         if (Gdx.input.isKeyPressed(Input.Keys.R)) {
@@ -111,7 +113,6 @@ public class GameScreen implements Screen {
 
         debugRenderer.render(world, camera.combined);
 
-        world.step(1 / 60f, 6, 2);
     }
 
     @Override

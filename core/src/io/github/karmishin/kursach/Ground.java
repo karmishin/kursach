@@ -15,8 +15,9 @@ public class Ground {
         bodyDef.position.set(new Vector2(0, 20));
 
         groundBody = world.createBody(bodyDef);
-        groundBox.setAsBox(camera.viewportWidth, 10.0f);
-        Fixture fixture = groundBody.createFixture(groundBox, 10.0f);
+        groundBody.setType(BodyDef.BodyType.DynamicBody);
+        groundBox.setAsBox(camera.viewportWidth, camera.viewportHeight);
+        Fixture fixture = groundBody.createFixture(groundBox, 0.0f);
         fixture.setFriction(1f);
 
     }

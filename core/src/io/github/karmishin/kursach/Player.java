@@ -25,6 +25,7 @@ public class Player {
     public Texture jumpTexture, landingTexture;
     public TextureAtlas runningAtlas, idleAtlas;
     Vector2 velocity = new Vector2();
+    Vector2 spawnPoint = new Vector2();
 
     enum PlayerState {
         IDLE, RUN, JUMP, FALL
@@ -34,13 +35,19 @@ public class Player {
         LEFT, RIGHT
     }
 
-    Player() {
+    Player(Game game) {
         width = 21;
         height = 35;
 
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(11, 21);
+
+        if (game.currentLevel == 0) {
+            spawnPoint.x = 25;
+            spawnPoint.y = 250;
+        }
+
+        bodyDef.position.set(spawnPoint);
     }
 
     public void createPlayer(World world) {

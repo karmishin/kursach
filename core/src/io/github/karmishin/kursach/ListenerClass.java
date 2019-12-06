@@ -30,8 +30,11 @@ public class ListenerClass implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-        if (contact.getFriction() > 100) {
+        if (contact.getFriction() > 10 && contact.getFriction() < 200) {
             game.setScreen(new GameOverScreen(game));
+        } else if (contact.getFriction() > 500) {
+            game.currentLevel += 1;
+            game.setScreen(new GameScreen(game));
         }
     }
 }
