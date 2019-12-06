@@ -1,6 +1,7 @@
 package io.github.karmishin.kursach;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
@@ -13,10 +14,10 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Timer;
 
 public class GameScreen implements Screen {
     final Game game;
-
     private World world;
     private Box2DDebugRenderer debugRenderer;
     BitmapFont font;
@@ -30,11 +31,15 @@ public class GameScreen implements Screen {
     private OrthogonalTiledMapRenderer tiledMapRenderer;
     private TiledMap map;
     private Platform platform;
+    private Timer timer;
+    private int seconds;
 
     public GameScreen(Game game) {
         this.game = game;
 
+
         world = new World(new Vector2(0, -100), true);
+        world.setContactListener(new ListenerClass(game));
         debugRenderer = new Box2DDebugRenderer();
 
         font = new BitmapFont();
@@ -49,25 +54,36 @@ public class GameScreen implements Screen {
         music.setVolume(0);
         music.play();
 
-        map = new TmxMapLoader().load("map/level.tmx");
+        map = new TmxMapLoader().load("map/level1.tmx");
 
         tiledMapRenderer = new OrthogonalTiledMapRenderer(map);
         tiledMapRenderer.setView(camera);
         platform = new Platform(world, map);
 
         background = new Background();
-        ground = new Ground(world, camera);
+        // ground = new Ground(world, camera);
 
         batch = new SpriteBatch();
+        timer = new Timer();
+
+        timer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                seconds++;
+            }
+        }, 1, 1);
+
     }
 
     @Override
     public void show() {
-
+        timer.start();
     }
 
     @Override
     public void render(float delta) {
+
+
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -77,6 +93,9 @@ public class GameScreen implements Screen {
         batch.begin();
 
         background.drawBackground(batch);
+        font.draw(batch, "Jumps left: " + player.jumpsLeft, 50, 470);
+        font.draw(batch, "Time: " + seconds, 50, 450);
+        font.draw(batch, player.body.getPosition().toString(), 50, 430);
         player.getKeyFrames(elapsedTime);
         player.state = Player.PlayerState.IDLE;
         player.updatePosition();
@@ -84,11 +103,15 @@ public class GameScreen implements Screen {
         player.flip(batch);
 
         batch.end();
-
         tiledMapRenderer.render();
+
+        if (Gdx.input.isKeyPressed(Input.Keys.R)) {
+            game.setScreen(new GameScreen(game));
+        }
+
         debugRenderer.render(world, camera.combined);
 
-        world.step(1/60f, 6, 2);
+        world.step(1 / 60f, 6, 2);
     }
 
     @Override

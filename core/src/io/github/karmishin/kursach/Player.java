@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 
 public class Player {
+    int jumpsLeft = 12;
     int width, height;
     PlayerState state;
     Direction direction;
@@ -75,31 +76,24 @@ public class Player {
 
     public void control() {
 
-
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-//            body.applyLinearImpulse(-0.80f, 0, this.body.getPosition().x, this.body.getPosition().y, true);
-//            body.setLinearVelocity(-100f, body.getLinearVelocity().y);
-//            body.setLinearVelocity(-100.0f, 0);
             body.applyLinearImpulse(new Vector2(-70000f, 0), body.getWorldCenter(), true);
             state = PlayerState.RUN;
             direction = Direction.LEFT;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                body.applyLinearImpulse(new Vector2(70000f, 210000f), body.getWorldCenter(), true);
-            } else {
-                body.applyLinearImpulse(new Vector2(70000f, 0), body.getWorldCenter(), true);
-            }
-
+            body.applyLinearImpulse(new Vector2(70000f, 0), body.getWorldCenter(), true);
             state = PlayerState.RUN;
             direction = Direction.RIGHT;
         }
 
-//        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-//            body.applyLinearImpulse(new Vector2(0, 210000f), body.getWorldCenter(), true);
-//            state = PlayerState.JUMP;
-//        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            if (jumpsLeft > 0) {
+                body.applyLinearImpulse(new Vector2(0, 80000f), body.getWorldCenter(), true);
+                jumpsLeft--;
+            }
+        }
 
         if (body.getLinearVelocity().y > 0) {
             state = PlayerState.JUMP;

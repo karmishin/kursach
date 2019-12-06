@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.3.1" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="25" height="15" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="11">
  <tileset firstgid="1" source="jungle.tsx"/>
+ <tileset firstgid="172" source="index.tsx"/>
  <layer id="1" name="Слой тайлов 1" width="25" height="15">
   <data encoding="base64" compression="zlib">
-   eAHFkUsOwjAMRHML7gJngB1UYVV2fJYU2HEP1lyUh4SlkYtFUkUi0lPtOJ5J45TarBkyEW0cYpW7K2XyDXSwrozfWhGU0hwWsIcDHCfET3oiKKUlrMC8HsRToXW0VMu8dK82HhnIhtfK1H7NZssZ32e5SIdhyWxOn269j/qG4hUFm5/ex3xr/uebpWnb/PSMaetX66Wxafc07IIm8/DlzEbJnHvORdpe0+f6rlFs7+17/52fucAAF7jCDVrvvQBxQFe3
+   eAHFkTsOAjEMRHML7gJngA5QqJaOT8mv4x7UtBySh8RIxitDsopEpKc4mXhsxSm1WSNsItpUiF2uTsqcF7CEeWX88opASmOYwAa2sBsQ38mJQEpTmIFq3YiHQmpvWS/V0t2D14pL914Bc+E9Mtqv2ay+9GCsw7BkNvt3tu3H1g3NKwTNz/ajuvqXCruPp/LW/Kwob7tbvTSWd0fCOkhSDS9nLkrm3PEu8vae/mz/NYr13z733+cDDRzhBGe4QOu7J7lkV8o=
   </data>
  </layer>
  <objectgroup id="2" name="Слой объектов 1">
