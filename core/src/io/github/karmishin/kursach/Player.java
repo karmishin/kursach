@@ -42,9 +42,14 @@ public class Player {
         bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
 
-        if (game.currentLevel == 0) {
-            spawnPoint.x = 25;
-            spawnPoint.y = 250;
+        switch (game.currentLevel) {
+            case 0:
+                spawnPoint.x = 25;
+                spawnPoint.y = 250;
+                break;
+            case 1:
+                spawnPoint.x = -1;
+                spawnPoint.y = 10;
         }
 
         bodyDef.position.set(spawnPoint);

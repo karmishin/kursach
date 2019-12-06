@@ -14,10 +14,16 @@ public class HUD {
         gameScreen.font.draw(gameScreen.batch, "Time: " + gameScreen.seconds, 50, 450);
         gameScreen.font.draw(gameScreen.batch, gameScreen.player.body.getPosition().toString(), 50, 430);
 
-        if (game.currentLevel == 0) {
-            gameScreen.font.draw(gameScreen.batch, "Don't fall on these!!!", 400, 140);
-            gameScreen.font.draw(gameScreen.batch, "Press SPACE to jump", 200, 340);
-            gameScreen.font.draw(gameScreen.batch, "FINISH", 740, 440);
+        switch (game.currentLevel) {
+            case 0:
+                gameScreen.font.draw(gameScreen.batch, "Don't fall on these!!!", 400, 140);
+                gameScreen.font.draw(gameScreen.batch, "Press SPACE to jump", 200, 340);
+                gameScreen.font.draw(gameScreen.batch, "FINISH -->", 720, 400);
+                break;
+            case 1:
+                gameScreen.font.draw(gameScreen.batch, "Tip: You can always start over by pressing R", 500, 50);
+                gameScreen.font.draw(gameScreen.batch, "FINISH -->", 720, 450);
+                break;
         }
     }
 }
